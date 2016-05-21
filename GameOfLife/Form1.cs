@@ -12,11 +12,12 @@ namespace GameOfLife
 {
     public partial class Form1 : Form
     {
-        bool[,] universe = new bool[5, 5];
-        bool[,] update = new bool[5, 5];
+        bool[,] universe = new bool[20, 20];
+        bool[,] update = new bool[20, 20];
         float generations = 0;
         bool timerState = true;
         int cellsAlive = 0;
+        bool displayCC = true;
 
         Timer timer = new Timer();
 
@@ -60,19 +61,34 @@ namespace GameOfLife
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
                     RectangleF rect = RectangleF.Empty;
+                    Font font = new Font("Arial", 5f);
+                    StringFormat stringFormat = new StringFormat();
+                    int neighbours = countNeighbours(x, y, -1, -1) + countNeighbours(x, y, -1, 0) + countNeighbours(x, y, -1, 1) + countNeighbours(x, y, 0, -1) + countNeighbours(x, y, 0, 1) + countNeighbours(x, y, 1, 1) + countNeighbours(x, y, 1, -1) + countNeighbours(x, y, 1, 0);
                     rect.X = width * x;
                     rect.Y = height * y;
                     rect.Width = width;
                     rect.Height = height;
+
+                    stringFormat.Alignment = StringAlignment.Center;
+                    stringFormat.LineAlignment = StringAlignment.Center;
 
                     if (universe[x,y] == true)
                     {
                         e.Graphics.FillRectangle(Brushes.Black, rect.X, rect.Y, rect.Width, rect.Height);
                     }
 
+                    // Displays how many neighbors a cell has based on a bool + if has more than 0 neighbors
+
+                    if (displayCC && neighbours > 0)
+                    {
+                        e.Graphics.DrawString(neighbours.ToString(), font, Brushes.Red, rect, stringFormat);
+                    }
+
                     e.Graphics.DrawRectangle(Pens.Black, rect.X, rect.Y, rect.Width, rect.Height);
+
                 }
             }
+
         }
 
         // Allows user to click cells on/off
@@ -104,6 +120,7 @@ namespace GameOfLife
                     universe[x, y] = false;
                 }
             }
+            generations = 0;
             graphicsPanel1.Invalidate();
         }
 
@@ -123,6 +140,8 @@ namespace GameOfLife
             }
             return value;
         }
+
+        
 
         // Counts how many alive cells are surrounding each cell
 

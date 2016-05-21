@@ -26,10 +26,9 @@ namespace GameOfLife
             timer.Interval = 20;
             timer.Enabled = true;
             timer.Tick += Timer_Tick;
-            //universe[2, 2] = true;
-            //universe[2, 1] = true;
-            //universe[2, 3] = true;
         }
+
+        // Timer to keep track of generations
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -40,11 +39,14 @@ namespace GameOfLife
 
             graphicsPanel1.Invalidate();
 }
+        // Exit the application
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        // Paint to fill in each square based on if it is alive
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -71,6 +73,8 @@ namespace GameOfLife
             }
         }
 
+        // Allows user to click cells on/off
+
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
             float width = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
@@ -87,6 +91,8 @@ namespace GameOfLife
             }
         }
 
+        // Empties the universe
+
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -98,6 +104,9 @@ namespace GameOfLife
             }
             graphicsPanel1.Invalidate();
         }
+
+        // Counts how many alive cells are surrounding each cell
+
         private int countNeighbours(int x, int y, int dx, int dy)
         {
             int value = 0;
@@ -110,7 +119,9 @@ namespace GameOfLife
             }
             
             return value;
-        }
+        } 
+
+        // Checks every cell to see whether or not they should be alive in the next generation
 
         private void checkCell()
         {
@@ -158,6 +169,8 @@ namespace GameOfLife
             }
         }
 
+        // Starts the time in the universe and lets the cell function as intended
+
         private void StartToolStripButton_Click(object sender, EventArgs e)
         {
             if (timerState != true)
@@ -167,6 +180,8 @@ namespace GameOfLife
             }
         }
 
+        // Pauses the current generation
+
         private void PauseToolStripButton_Click(object sender, EventArgs e)
         {
             if (timerState != false)
@@ -175,6 +190,8 @@ namespace GameOfLife
                 timer.Stop();
             }
         }
+
+        // Advances the universe to the next generation
 
         private void NextToolStripButton_Click(object sender, EventArgs e)
         {
@@ -187,5 +204,6 @@ namespace GameOfLife
                 graphicsPanel1.Invalidate();
             
         }
+
     }
 }

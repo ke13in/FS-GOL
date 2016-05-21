@@ -16,6 +16,7 @@ namespace GameOfLife
         bool[,] update = new bool[5, 5];
         float generations = 0;
         bool timerState = true;
+        int cellsAlive = 0;
 
         Timer timer = new Timer();
 
@@ -28,13 +29,13 @@ namespace GameOfLife
             timer.Tick += Timer_Tick;
         }
 
-        // Timer to keep track of generations
+        // Timer to keep track of generations and cells alive
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             generations++;
-
-            toolStripStatusLabel1.Text = "Generations: " + generations.ToString();
+            countCells();
+            toolStripStatusLabel1.Text = "Generations: " + generations.ToString() + "         Cells Alive: " + cellsAlive.ToString();
             checkCell();
 
             graphicsPanel1.Invalidate();
@@ -50,6 +51,7 @@ namespace GameOfLife
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
+
             float width = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
             float height = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
 
@@ -105,6 +107,23 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
+        // Counts how many cells are alive
+
+        private int countCells()
+        {
+            cellsAlive = 0;
+            int value = 0;
+            for (int a = 0; a < universe.GetLength(1); a++)
+            {
+                for (int b = 0; b < universe.GetLength(0); b++)
+                {
+                    if (universe[a, b] == true)
+                        cellsAlive++;
+                }
+            }
+            return value;
+        }
+
         // Counts how many alive cells are surrounding each cell
 
         private int countNeighbours(int x, int y, int dx, int dy)
@@ -120,6 +139,7 @@ namespace GameOfLife
             
             return value;
         } 
+
 
         // Checks every cell to see whether or not they should be alive in the next generation
 

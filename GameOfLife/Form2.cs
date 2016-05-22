@@ -35,6 +35,7 @@ namespace GameOfLife
             if (DialogResult.OK == color.ShowDialog())
             {
                 backgroundColor.BackColor = color.Color;
+                Settings.Default.panelColor = backgroundColor.BackColor;
             }
         }
 
@@ -46,6 +47,7 @@ namespace GameOfLife
             if (DialogResult.OK == color.ShowDialog())
             {
                 glColor.BackColor = color.Color;
+                Settings.Default.gridColor = glColor.BackColor;
             }
         }
 
@@ -57,6 +59,7 @@ namespace GameOfLife
             if (DialogResult.OK == color.ShowDialog())
             {
                 tenGlColor.BackColor = color.Color;
+                Settings.Default.gridBold = tenGlColor.BackColor;
             }
         }
 
@@ -68,6 +71,7 @@ namespace GameOfLife
             if (DialogResult.OK == color.ShowDialog())
             {
                 liveCellColor.BackColor = color.Color;
+                Settings.Default.cellColor = liveCellColor.BackColor;
             }
         }
 

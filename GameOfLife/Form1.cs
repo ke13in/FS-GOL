@@ -7,17 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using GameOfLife.Properties;
 namespace GameOfLife
 {
     public partial class Form1 : Form
     {
-        bool[,] universe = new bool[20, 20];
-        bool[,] update = new bool[20, 20];
+        // init variables
+        bool[,] universe = new bool[Settings.Default.gridX, Settings.Default.gridY];
+        bool[,] update = new bool[Settings.Default.gridX, Settings.Default.gridY];
         float generations = 0;
         bool timerState = true;
         int cellsAlive = 0;
         bool displayCC = true;
+        Color boldGrid = new Color();
+        Color gridColor = new Color();
+        Color cellColor = new Color();
+        int timerCount, xcount, ycount;
 
         Timer timer = new Timer();
 
@@ -25,7 +30,6 @@ namespace GameOfLife
         {
             InitializeComponent();
 
-            timer.Interval = 20;
             timer.Enabled = true;
             timer.Tick += Timer_Tick;
         }
@@ -53,8 +57,20 @@ namespace GameOfLife
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
 
-            float width = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
-            float height = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
+            boldGrid = Settings.Default.gridBold;
+            gridColor = Settings.Default.gridColor;
+            graphicsPanel1.BackColor = Settings.Default.panelColor;
+            cellColor = Settings.Default.cellColor;
+
+            timerCount = Settings.Default.time;
+            xcount = Settings.Default.gridX;
+            ycount = Settings.Default.gridY;
+
+            float width = (float)graphicsPanel1.ClientSize.Width / (float)universe.GetLength(0);
+            float height = (float)graphicsPanel1.ClientSize.Height / (float)universe.GetLength(1);
+
+            Pen p1 = new Pen(cellColor, .01f);
+            Pen p2 = new Pen(boldGrid, .02f);
 
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -84,7 +100,12 @@ namespace GameOfLife
                         e.Graphics.DrawString(neighbours.ToString(), font, Brushes.Red, rect, stringFormat);
                     }
 
-                    e.Graphics.DrawRectangle(Pens.Black, rect.X, rect.Y, rect.Width, rect.Height);
+                    e.Graphics.DrawRectangle(p1, rect.X, rect.Y, rect.Width, rect.Height);
+
+                    if (x % 10 == 0)
+                        e.Graphics.DrawLine(p2, rect.Width * x, 0.0f, rect.Width * x, graphicsPanel1.Height);
+                    if (y % 10 == 0)
+                        e.Graphics.DrawLine(p2, 0.0f, rect.Height * y, graphicsPanel1.Width, rect.Height * y);
 
                 }
             }
@@ -236,13 +257,30 @@ namespace GameOfLife
         {
            
                 generations++;
-
-                toolStripStatusLabel1.Text = "Generations: " + generations.ToString();
+                countCells();
+                toolStripStatusLabel1.Text = "Generations: " + generations.ToString() + "         Cells Alive: " + cellsAlive.ToString();
                 checkCell();
 
                 graphicsPanel1.Invalidate();
             
         }
 
+        private void customizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 form = new Form2();
+
+            if (DialogResult.OK == form.ShowDialog())
+            {
+                boldGrid = Settings.Default.gridBold;
+                gridColor = Settings.Default.gridColor;
+                graphicsPanel1.BackColor = Settings.Default.panelColor;
+                cellColor = Settings.Default.cellColor;
+                timerCount = Settings.Default.time;
+                xcount = Settings.Default.gridX;
+                ycount = Settings.Default.gridY;
+
+                universe = new bool[xcount, ycount];
+            }
+        }
     }
 }

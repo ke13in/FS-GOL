@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="gridX" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">40</Value>
     </Setting>
     <Setting Name="gridY" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">40</Value>
     </Setting>
     <Setting Name="time" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">20</Value>
@@ -21,10 +21,10 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="gridBold" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Black</Value>
+      <Value Profile="(Default)">Red</Value>
     </Setting>
     <Setting Name="gridColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Silver</Value>
+      <Value Profile="(Default)">Black</Value>
     </Setting>
   </Settings>
 </SettingsFile>

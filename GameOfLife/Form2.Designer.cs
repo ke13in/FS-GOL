@@ -87,6 +87,11 @@
             this.milliUpDown.Name = "milliUpDown";
             this.milliUpDown.Size = new System.Drawing.Size(120, 22);
             this.milliUpDown.TabIndex = 1;
+            this.milliUpDown.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
             // 
             // label1
             // 
@@ -127,6 +132,11 @@
             this.yUpDown.Name = "yUpDown";
             this.yUpDown.Size = new System.Drawing.Size(120, 22);
             this.yUpDown.TabIndex = 3;
+            this.yUpDown.Value = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
             // 
             // xUpDown
             // 
@@ -134,6 +144,11 @@
             this.xUpDown.Name = "xUpDown";
             this.xUpDown.Size = new System.Drawing.Size(120, 22);
             this.xUpDown.TabIndex = 2;
+            this.xUpDown.Value = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
             // 
             // label3
             // 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GameOfLife.Properties;
+using System.IO;
 namespace GameOfLife
 {
     public partial class Form1 : Form
@@ -295,6 +296,50 @@ namespace GameOfLife
             Settings.Default.gridX = xcount;
             Settings.Default.gridY = ycount;
             Settings.Default.Save();
+        }
+
+        //Allows the user to save
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "All Files|*.*|Cells|*.cells";
+            save.FilterIndex = 2; save.DefaultExt = "cells";
+
+
+            if (DialogResult.OK == save.ShowDialog())
+            {
+                StreamWriter write = new StreamWriter(save.FileName);
+
+                write.WriteLine("!This is my comment.");
+
+                for (int y = 0; y < xcount; y++)
+                {
+                    String currentRow = string.Empty;
+
+                    for (int x = 0; x < ycount; x++)
+                    {
+                        if (universe[x, y] == true)
+                        {
+                            currentRow = currentRow + "O";
+                        }
+                        else
+                        {
+                            if (universe[x, y] == false)
+                            {
+                                currentRow = currentRow + ".";
+                            }
+                        }
+                    }
+                    write.WriteLine(currentRow);
+                }
+                write.Close();
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
         }
 
         // Advances the universe to the next generation

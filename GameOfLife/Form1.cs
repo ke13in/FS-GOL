@@ -24,6 +24,7 @@ namespace GameOfLife
         Color gridColor = new Color();
         Color cellColor = new Color();
         int timerCount, xcount, ycount;
+        int seed;
 
         Timer timer = new Timer();
 
@@ -67,6 +68,7 @@ namespace GameOfLife
             timer.Interval = timerCount;
             xcount = Settings.Default.gridX;
             ycount = Settings.Default.gridY;
+            seed = Settings.Default.seed;
 
             float width = (float)graphicsPanel1.ClientSize.Width / (float)universe.GetLength(0);
             float height = (float)graphicsPanel1.ClientSize.Height / (float)universe.GetLength(1);
@@ -265,6 +267,7 @@ namespace GameOfLife
             timerCount = Settings.Default.time;
             xcount = Settings.Default.gridX;
             ycount = Settings.Default.gridY;
+            seed = Settings.Default.seed;
 
             universe = new bool[xcount, ycount];
             graphicsPanel1.Invalidate();
@@ -281,6 +284,7 @@ namespace GameOfLife
             timerCount = Settings.Default.time;
             xcount = Settings.Default.gridX;
             ycount = Settings.Default.gridY;
+            seed = Settings.Default.seed;
 
             universe = new bool[xcount, ycount];
             graphicsPanel1.Invalidate();
@@ -295,6 +299,7 @@ namespace GameOfLife
             Settings.Default.time = timerCount;
             Settings.Default.gridX = xcount;
             Settings.Default.gridY = ycount;
+            Settings.Default.seed = seed;
             Settings.Default.Save();
         }
 
@@ -337,9 +342,121 @@ namespace GameOfLife
             }
         }
 
+        //Allows the user to open a generation
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "All Files|*.*|Cells|*.cells";
+            open.FilterIndex = 2;
+
+            if (DialogResult.OK == open.ShowDialog())
+            {
+                StreamReader read = new StreamReader(open.FileName);
+                int mWidth = 0;
+                int mHeight = 0;
+
+                while (!read.EndOfStream)
+                {
+                    string row = read.ReadLine();
+
+                    if (row.Contains("!"))
+                    {
+
+                    }
+                    else
+                    {
+                        mHeight++;
+                    }
+                    mWidth = row.Length;
+                }
+
+                xcount = mWidth;
+                ycount = mHeight;
+                universe = new bool[xcount, ycount];
+                update = new bool[xcount, ycount];
+
+                read.BaseStream.Seek(0, SeekOrigin.Begin);
+                int ypos = 0;
+
+                while (!read.EndOfStream)
+                {
+                    string row = read.ReadLine();
+
+                    if (row.Contains("!"))
+                    {}
+                    else
+                    {
+                        for (int xPos = 0; xPos < row.Length; xPos++)
+                        {
+
+                            if (row[xPos].Equals('O'))
+                            {
+                                universe[xPos, ypos] = true;
+                            }
+                            else if (row[xPos].Equals('.'))
+                            {
+                                universe[xPos, ypos] = false;
+                            }
+                        }
+                        ypos++;
+                    }
+                }
+                read.Close();
+                graphicsPanel1.Invalidate();
+            }
+    }
+        //Seeds from new
+
+        private void fromNewSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form3 dlg = new Form3();
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                seed = Settings.Default.seed;
+            }
+            Random rand = new Random(seed);
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    if (rand.Next() % 2 == 0) { universe[x, y] = true; update[x, y] = true; }
+                    else { universe[x, y] = false; update[x, y] = false; }
+                }
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        //Seeds from current
+
+        private void fromCurrentSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Random rand = new Random(seed);
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    if (rand.Next() % 2 == 0) { universe[x, y] = true; update[x, y] = true; }
+                    else { universe[x, y] = false; update[x, y] = false; }
+                }
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        //Seeds from time
+
+        private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Random rand = new Random();
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    if (rand.Next() % 2 == 0) { universe[x, y] = true; update[x, y] = true; }
+                    else { universe[x, y] = false; update[x, y] = false; }
+                }
+            }
+            graphicsPanel1.Invalidate();
         }
 
         // Advances the universe to the next generation
@@ -371,6 +488,7 @@ namespace GameOfLife
                 timerCount = Settings.Default.time;
                 xcount = Settings.Default.gridX;
                 ycount = Settings.Default.gridY;
+                seed = Settings.Default.seed;
 
                 universe = new bool[xcount, ycount];
             }

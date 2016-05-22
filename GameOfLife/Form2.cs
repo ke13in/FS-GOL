@@ -13,6 +13,9 @@ namespace GameOfLife
 {
     public partial class Form2 : Form
     {
+
+        // Everything here allows the user to edit options and sets the options to match what each value is set to
+
         public Form2()
         {
             InitializeComponent();
@@ -74,6 +77,8 @@ namespace GameOfLife
                 Settings.Default.cellColor = liveCellColor.BackColor;
             }
         }
+
+        //Applies the changes
 
         private void okButton_Click(object sender, EventArgs e)
         {
